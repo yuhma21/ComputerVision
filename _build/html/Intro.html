@@ -1,0 +1,258 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>1. Intro &mdash; Computer Vision 2014.02.19 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '2014.02.19',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Computer Vision 2014.02.19 documentation" href="index.html" />
+    <link rel="next" title="2. About PIL" href="About PIL.html" />
+    <link rel="prev" title="Welcome to Computer Vision’s documentation!" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="About PIL.html" title="2. About PIL"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to Computer Vision’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Computer Vision 2014.02.19 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="intro">
+<h1>1. Intro<a class="headerlink" href="#intro" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">著者:</th><td class="field-body">yuhma21</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="pil">
+<h2>1.1. PILを利用する<a class="headerlink" href="#pil" title="Permalink to this headline">¶</a></h2>
+<p>PIL(Python Imaging Library)は画像に関する操作が自在に可能。
+もっとも重要なモジュールはImageモジュール。</p>
+<p><strong>画像を読み込む</strong></p>
+<p>画像を
+<a class="reference download internal" href="_downloads/empire.jpg"><tt class="xref download docutils literal"><span class="pre">ダウンロード</span></tt></a></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/env python</span>
+<span class="c"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+
+<span class="c">#画像を読み込む</span>
+<span class="n">pil_im</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s">&#39;empire.jpg&#39;</span><span class="p">)</span>
+
+<span class="c">#画像を読み込んでグレースケールに変換する</span>
+<span class="n">im_gray</span> <span class="o">=</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s">&#39;empire.jpg&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s">&#39;L&#39;</span><span class="p">)</span>
+
+<span class="c">#画像を表示する</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">pil_im</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">im_gray</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>コードを実行すると下図のように表示されるはずです</p>
+<img alt="_images/pilread.png" src="_images/pilread.png" />
+<div class="section" id="jpg">
+<h3>1.1.1. jpgファイルリストを取得<a class="headerlink" href="#jpg" title="Permalink to this headline">¶</a></h3>
+<p>osモジュールを利用してファイルのリストを取得する。</p>
+<p>imtools.pyというファイルを作成し下記の命令文を加える</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/env python</span>
+<span class="c"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="k">def</span> <span class="nf">get_imlist</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&#39;.jpg&#39;</span><span class="p">)]</span>
+</pre></div>
+</div>
+<p>ここで、利用されているosモジュールの関数などを説明。</p>
+<dl class="function">
+<dt id="os.path.join">
+<tt class="descclassname">os.path.</tt><tt class="descname">join</tt><big>(</big><em>path1</em><span class="optional">[</span>, <em>path2</em><span class="optional">[</span>, <em>...</em><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#os.path.join" title="Permalink to this definition">¶</a></dt>
+<dd><p>パスを結合する</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="s">&#39;c:</span><span class="se">\&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="s">&#39;foo.jpg&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+<span class="go">&#39;c:\foo.jpg&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="str.endswith">
+<tt class="descclassname">str.</tt><tt class="descname">endswith</tt><big>(</big><em>suffix</em><big>)</big><a class="headerlink" href="#str.endswith" title="Permalink to this definition">¶</a></dt>
+<dd><p>文字列strでsuffixの文字列で終了している場合、Trueを返す。そうでない場合はFalse</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;foo.png&#39;</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&#39;png&#39;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;foo.png&#39;</span><span class="o">.</span><span class="n">endswith</span><span class="p">()</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h3>1.1.2. サムネイルの作成<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">pil_im</span><span class="o">.</span><span class="n">thumbnail</span><span class="p">((</span><span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>指定したサイズにサムネイルを作成してくれる</p>
+</div>
+<div class="section" id="id2">
+<h3>1.1.3. 領域のコピーと貼り付け<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>画像を切り抜くにはcrop()メソッドを利用する</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">box</span> <span class="o">=</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span>
+<span class="n">region</span> <span class="o">=</span> <span class="n">pil_im</span><span class="o">.</span><span class="n">crop</span><span class="p">(</span><span class="n">box</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>切り抜く領域は(左, 上, 右, 下)の座標を指定する。</p>
+<p>画像を貼り付けるにはpaste()メソッドを利用する</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">pil_im</span><span class="o">.</span><span class="n">paste</span><span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="n">box</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id3">
+<h3>1.1.4. 拡大縮小と回転<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p>画像のサイズを変更するには、resizeメソッドを利用する。その際、サイズをタプルで指定する</p>
+<p>画像を回転するには、rotate()メソッドを利用する。引数は時計回りの角度(degree)で指定する</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/env python</span>
+<span class="c"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+
+<span class="c">#画像を読み込む</span>
+<span class="n">pil_im</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s">&#39;empire.jpg&#39;</span><span class="p">)</span>
+
+<span class="c">#画像をコピーする領域をタプルに格納</span>
+<span class="n">region</span> <span class="o">=</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span>
+<span class="c">#画像をコピーして格納</span>
+<span class="n">cpy_im</span> <span class="o">=</span> <span class="n">pil_im</span><span class="o">.</span><span class="n">crop</span><span class="p">(</span><span class="n">region</span><span class="p">)</span>
+<span class="c">#画像を回転して格納</span>
+<span class="n">cpy_im</span> <span class="o">=</span> <span class="n">cpy_im</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="mi">180</span><span class="p">)</span>
+<span class="c">#コピーした位置と同じ位置に貼り付け</span>
+<span class="n">pil_im</span><span class="o">.</span><span class="n">paste</span><span class="p">(</span><span class="n">cpy_im</span><span class="p">,</span> <span class="n">region</span><span class="p">)</span>
+
+<span class="c">#画像を表示</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">pil_im</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="_images/rotePaste.png" src="_images/rotePaste.png" />
+</div>
+</div>
+<div class="section" id="numpy">
+<h2>1.2. Numpy<a class="headerlink" href="#numpy" title="Permalink to this headline">¶</a></h2>
+<p>Numpyを利用して配列を扱う</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">1. Intro</a><ul>
+<li><a class="reference internal" href="#pil">1.1. PILを利用する</a><ul>
+<li><a class="reference internal" href="#jpg">1.1.1. jpgファイルリストを取得</a></li>
+<li><a class="reference internal" href="#id1">1.1.2. サムネイルの作成</a></li>
+<li><a class="reference internal" href="#id2">1.1.3. 領域のコピーと貼り付け</a></li>
+<li><a class="reference internal" href="#id3">1.1.4. 拡大縮小と回転</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#numpy">1.2. Numpy</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to Computer Vision&#8217;s documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="About PIL.html"
+                        title="next chapter">2. About PIL</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/Intro.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="About PIL.html" title="2. About PIL"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to Computer Vision’s documentation!"
+             >previous</a> |</li>
+        <li><a href="index.html">Computer Vision 2014.02.19 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, yuhma21.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.
+    </div>
+  </body>
+</html>
