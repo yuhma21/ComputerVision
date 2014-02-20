@@ -171,4 +171,5 @@ Numpy
 PILモジュールを利用して読み込んだ画像は、Numpyモジュールのndarrayオブジェクトで
 キャストすることにより、配列に変換することが出来る。
 
-ndarrayを画像に戻すときは、PILのImage.fromarray()メソッドを活用する。
+ndarrayを画像に戻すときは、PILのImage.fromarray(obj)メソッドを活用する。
+Image.frombufferでもいいらしい。

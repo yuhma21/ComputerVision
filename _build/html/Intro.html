@@ -180,9 +180,23 @@
 <img alt="_images/rotePaste.png" src="_images/rotePaste.png" />
 </div>
 </div>
+<div class="section" id="matplotlib">
+<h2>1.2. matplotlib<a class="headerlink" href="#matplotlib" title="Permalink to this headline">¶</a></h2>
+<p>matplotlibはpythonでグラフを書くためのモジュール</p>
+<p>通常、下記のように宣言する</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">source</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="numpy">
-<h2>1.2. Numpy<a class="headerlink" href="#numpy" title="Permalink to this headline">¶</a></h2>
-<p>Numpyを利用して配列を扱う</p>
+<h2>1.3. Numpy<a class="headerlink" href="#numpy" title="Permalink to this headline">¶</a></h2>
+<p>PILモジュールを利用して読み込んだ画像は、Numpyモジュールのndarrayオブジェクトで
+キャストすることにより、配列に変換することが出来る。</p>
+<p>ndarrayを画像に戻すときは、PILのImage.fromarray(obj)メソッドを活用する。
+Image.frombufferでもいいらしい。</p>
 </div>
 </div>
 
@@ -202,7 +216,8 @@
 <li><a class="reference internal" href="#id3">1.1.4. 拡大縮小と回転</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#numpy">1.2. Numpy</a></li>
+<li><a class="reference internal" href="#matplotlib">1.2. matplotlib</a></li>
+<li><a class="reference internal" href="#numpy">1.3. Numpy</a></li>
 </ul>
 </li>
 </ul>
