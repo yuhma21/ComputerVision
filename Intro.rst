@@ -147,7 +147,28 @@ imtools.pyというファイルを作成し下記の命令文を加える
 
 .. image:: /cv/rotePaste.png
 
+matplotlib
+=======================
+
+matplotlibはpythonでグラフを書くためのモジュール
+
+通常、下記のように宣言する
+
+.. code-block:: python
+
+   import matplotlib.pyplot as plt
+
+
+
+.. code-block:: python
+
+    source
+
+
 Numpy
 ==============================
 
-Numpyを利用して配列を扱う
+PILモジュールを利用して読み込んだ画像は、Numpyモジュールのndarrayオブジェクトで
+キャストすることにより、配列に変換することが出来る。
+
+ndarrayを画像に戻すときは、PILのImage.fromarray()メソッドを活用する。
