@@ -164,6 +164,13 @@ matplotlibはpythonでグラフを書くためのモジュール
 
     source
 
+数式を試しに書いてみる
+
+.. math::
+
+   \frac{abc}{xyz}
+   \sqrt[n]{abc}
+
 
 Numpy
 ==============================
