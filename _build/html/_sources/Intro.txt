@@ -158,19 +158,78 @@ matplotlibはpythonでグラフを書くためのモジュール
 
    import matplotlib.pyplot as plt
 
-
+画像の表示や点の表示は下のソースの通り
 
 .. code-block:: python
 
-    source
+   #!/usr/bin/env python
+   # -*- coding: utf-8 -*-
+   
+   from PIL import Image
+   import matplotlib.pyplot as plt
+   import numpy as np
+   
+   im = np.array(Image.open('empire.jpg').convert('L'))
+   
+   #画像を表示する
+   plt.subplot(121)
+   plt.imshow(im)
+   
+   #グラフに点を表示する
+   plt.plot([100, 200, 300], [200, 500, 200], 'r*')
+   
+   #グラフに線を描画する
+   plt.plot([100, 200], [200, 500])
+   
+   #画像のヒストグラムを表示する
+   plt.subplot(122)
+   #ヒストグラムはビンの数も指定する
+   plt.hist(im.flatten(), 128)
+   
+   #結果を表示
+   plt.show()
 
-数式を試しに書いてみる
+.. image:: /cv/matplottest.png
 
-.. math::
+**matplotlibの色コマンド**
 
-   \frac{abc}{xyz}
-   \sqrt[n]{abc}
+================  ========================
+コマンド              色
+================  ========================
+'b'                青
+'g'                緑
+'r'                赤
+'c'                シアン
+'m'                マゼンタ
+'y'                黄
+'k'                黒
+'w'                白
+================  ========================
 
+**線のスタイル**
+
+================  ========================
+コマンド              線スタイル
+================  ========================
+'-'                実線
+'- -'              破線
+':'                点線
+================  ========================
+
+**マーカースタイル**
+
+================  ========================
+コマンド              マーカースタイル
+================  ========================
+'.'                点
+'o'                丸
+'s'                四角
+'*'                星
+'+'                十字
+'x'                バツ
+================  ========================
+
+表示された画像をクリックしたポイントを取得するには、plt.ginput(クリック数)を利用する
 
 Numpy
 ==============================
@@ -180,3 +239,121 @@ PILモジュールを利用して読み込んだ画像は、Numpyモジュール
 
 ndarrayを画像に戻すときは、PILのImage.fromarray(obj)メソッドを活用する。
 Image.frombufferでもいいらしい。
+
+配列による画像表現
+--------------------------
+
+* PIL形式の画像をarrayオブジェクトでキャストすることで配列に変換できる
+* 配列へのアクセス方法は通常のリスト型と同じ
+* 配列から画像へ変換するにはImage.fromarray(np.uint8(im))を利用
+
+念のため配列をキャストしたほうがよい
+
+画面のサイズ変更
+--------------------------
+
+PILの画像変換関数:im.resize(size)を利用すると簡単
+
+.. code-block:: python
+
+   def imresize(im, sz):
+       """ array形式のimを受け取りサイズ(タプル)にサイズ変更する
+       """
+       pil_im = Image.fromarray(np.uint8(im))
+       return np.array(pil_im.resize(sz))
+
+ヒストグラム平坦化
+----------------------------
+
+画像全体の明暗のレベルを均一化するために、ヒストグラムの平坦化を行う。
+
+* 画像の明度が同じようになるために利用する
+* コントラストを向上させる
+
+.. code-block:: python
+
+   def histeq(im, nbr_bins=256):
+       """ グレースケール画像のヒストグラム平坦化
+           array形式のグレースケール画像を受け取る
+       """
+       #画像のヒストグラムを取得する
+       imhist, bins = np.histogram(im.flatten(), nbr_bins, normed=True)
+       cdf = imhist.cumsum()
+       cdf = 255 * cdf / cdf[-1]
+       #cdfを線形保管し、新しいピクセル値にする
+       im2 = np.interp(im.flatten(),bins[:-1], cdf)
+   
+       return im2.reshape(im.shape), cdf
+
+.. function:: histgram(a, bins=10, range=None, normed=False)
+   :module: numpy
+
+   ヒストグラムのデータを計算する
+
+   a:配列
+
+   normed:正規化するかどうか
+
+.. function:: cumsum()
+   :module: numpy
+
+   累積度数分布に並び替える
+
+.. function:: interp(x, xp, fp)
+   :module: numpy
+
+   一次元の線形保管を行う
+
+.. code-block:: pyhon
+
+   #!/usr/bin/env python
+   # -*- coding: utf-8 -*-
+   
+   from PIL import Image
+   import numpy as np
+   import matplotlib.pyplot as plt
+   
+   im = np.array(Image.open('empire.jpg').convert('L')).flatten()
+   #ヒストグラムを取得する
+   imhist, bins = np.histogram(im, 256, normed=True)
+   cdf = imhist.cumsum()
+   #正規化する
+   cdf_norm = 255 * cdf / cdf[-1]
+   #cdf_normを線形補完する
+   im2 = np.interp(im.flatten(), bins[:-1], cdf_norm)
+   
+   plt.figure()
+   plt.subplot(121)
+   plt.plot(imhist)
+   plt.subplot(122)
+   plt.plot(cdf)
+   plt.figure()
+   plt.plot(im2,'.')
+   plt.show()
+
+.. image:: /cv/cdf.png
+
+.. image:: /cv/interp.png
+
+平均画像
+--------------
+
+PILモジュールのImage.composite(image1, image2, mask)を利用するのが吉
+
+画像の主成分分析
+---------------------
+
+* 主成分分析（Principal Component Analysis）は次元削減を行うのに有用な方法。
+* 訓練データの次元削減をする
+* 重要度順に並んだ座標軸に値を変換
+
+**numpyではSVD(Singular Value Decomposition)を利用**
+
+.. function:: svd(a)
+   :module: numpy.linalg
+
+   U:
+
+   S:分散を返す
+
+   V:写像行列を返す
