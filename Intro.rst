@@ -294,17 +294,52 @@ PILの画像変換関数:im.resize(size)を利用すると簡単
 
    normed:正規化するかどうか
 
-.. function:: cumsum()
+.. function:: cumsum(a, axis=None, dtype=None, out=None)
    :module: numpy
 
-   累積度数分布に並び替える
+   累積度数分布を計算する
+
+   a:対象の配列
+
+   axis:累積度数分布を行う方向を決める
+
+   dtype:出力の型を決める
+
+   .. code-block:: python
+   
+      >>> a = np.array([[3,2,1], [4,5,6]])
+      >>> a
+      array([[3, 2, 1],
+             [4, 5, 6]])
+      >>> np.cumsum(a)
+      array([ 3,  5,  6, 10, 15, 21])
 
 .. function:: interp(x, xp, fp)
    :module: numpy
 
-   一次元の線形保管を行う
+   一次元の線形保管を行う。xpの写像fpの対応関係をxに適用する
 
-.. code-block:: pyhon
+   x:変換を適用する配列
+
+   .. code-block:: python
+   
+      >>> import numpy as np
+      >>> xp = [1, 3, 5]
+      >>> fp = [2, 6, 10]
+      >>> x = [2, 4]
+      >>> np.interp(x, xp, fp)
+      array([4., 8.])
+      >>> #外挿はできない
+      >>> x = [7, 8]
+      >>> np.interp(x, xp, fp)
+      array([10., 10.])
+      >>> 当然、非線形な写像は扱えない
+      >>> fp = [1, 9, 25]
+      >>> x = [2, 4]
+      >>> np.interp(x, xp, fp)
+      array([5, 17])
+
+.. code-block:: python
 
    #!/usr/bin/env python
    # -*- coding: utf-8 -*-
@@ -357,3 +392,178 @@ PILモジュールのImage.composite(image1, image2, mask)を利用するのが�
    S:分散を返す
 
    V:写像行列を返す
+
+pickleモジュール
+===========================
+
+オブジェクトの状態を保存できる。学習済みのオブジェクトを一旦保存し、
+再度、呼び出すときなどに非常に有効。
+
+.. code-block:: python
+
+  import pickle
+  from sklern import svm
+  clf = svm.SVC('linear')
+  f = open('test.pkl', 'wb')
+  plckle.dump(clf, f)
+  f.close()
+
+再度、呼び出すときは下記の通り
+
+.. code-block:: python
+
+   import pickle
+   from sklern import svm
+   f = open('test.pkl', 'rb')
+   clf = plckle.dump(f)
+   f.close()
+
+withディレクティプを使って、closeの処理を省略してもよい
+
+SciPy
+=================================
+
+SciPyはNumPy上に構築された、数値積分、最適化、統計、信号処理を行うパッケージ
+
+画像をぼかす
+-----------------------------
+
+ガウシアンカーネルを利用してぼかす。
+
+.. math::
+   
+   I_\sigma = I \times G_\sigma
+
+   G_\sigma = \frac{1}{2\pi\sigma}e^{-(x^{2}+y^{2})/2\sigma^{2}}
+
+画像の微分
+--------------------
+
+.. math::
+   
+   |\nabla |=\sqrt{I_x^{2}+I_y^{2}}
+
+モルフォロジー
+-----------------------
+
+* モルフォロジーは基本図形を計測したり解析したりする画像処理手法
+* 通常、2値画像に利用されるが、グレースケールでも良い
+* 物体の数を数えたり、大きさを測定したりする。
+
+モルフォロジーはscipy.ndimageモジュールのmorphogyにまとめてある
+
+2値画像用の計数や測定関数はscipy.ndimageモジュールのmeasurementsにある
+
+**画像の物体を数える**
+
+画像を
+:download:`ダウンロード</download/houses.png>`
+
+.. code-block:: python
+
+   #!/usr/bin/env python
+   # -*- coding: utf-8 -*-
+   
+   from PIL import Image
+   from scipy.ndimage import measurements, morphology
+   import numpy as np
+   import matplotlib.pyplot as plt
+   
+   #画像を読み込んで2値化
+   im = np.array(Image.open('houses.png').convert('L'))
+   im = 1 * (im < 128)
+   
+   labels, nbr_objects = measurements.label(im)
+   print('number of objects:',nbr_objects)
+   
+   plt.imshow(labels)
+   plt.show()
+
+.. image:: /cv/morpho.png
+
+コード中のmeasuments.labelメソッドが返すlabelは物体を認識した画像のNoを
+ラベリングした配列を返す
+
+例えば
+
+.. code-block:: python
+
+   [1, 0, 0, 1]
+   [1, 0, 0, 0]
+   [0, 0, 0, 0]
+   [0, 0, 0, 1]
+
+という画像があった場合、オブジェクト数は3となる。そしてそれをラベリングしたものが下記の通り
+
+.. code-block:: python
+
+   [1, 0, 0, 2]
+   [1, 0, 0, 0]
+   [0, 0, 0, 0]
+   [0, 0, 0, 3]
+
+上記の例では物体がつながっている箇所があるのでOpening演算を実施し、分離する
+
+.. code-block:: python
+
+   #!/usr/bin/env python
+   # -*- coding: utf-8 -*-
+   
+   from PIL import Image
+   from scipy.ndimage import measurements, morphology
+   import numpy as np
+   import matplotlib.pyplot as plt
+   
+   #画像を読み込んで2値化
+   im = np.array(Image.open('houses.png').convert('L'))
+   im = 1 * (im < 128)
+   
+   labels, nbr_objects = measurements.label(im)
+   print('number of objects:',nbr_objects)
+   
+   im_open = morphology.binary_opening(im, np.ones((9, 5)), iterations=2)
+   labels_open, nbr_objects_open = measurements.label(im_open)
+   print('number of opening_objects:',nbr_objects_open)
+   
+   plt.subplot(221)
+   plt.imshow(im)
+   plt.subplot(222)
+   plt.imshow(labels)
+   plt.subplot(223)
+   plt.imshow(im_open)
+   plt.subplot(224)
+   plt.imshow(labels_open)
+   plt.show()
+
+iterationは演算回数
+
+.. image:: /cv/morphoopen.png
+
+便利なSciPyモジュール
+------------------------------------
+
+.matファイルを読み書きする
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Matlabの.matファイルを読み書きできる
+
+.. code-block:: python
+
+  import scipy.io
+  data = scipy.io.loadmat('test.mat')
+
+配列を画像として保存する
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+配列を画像として保存できる。miscにはlenaもいる
+
+.. code-block:: python
+
+   from scipy import misc
+   import numpy as np
+
+   lena = np.array(misc.lena())
+   misc.imsave('lena.jpg', lena)
+
+高度な例
+============================
