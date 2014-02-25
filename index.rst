@@ -13,6 +13,7 @@ Contents:
    :numbered:
 
    Intro
+   Descriptor
    About PIL
 
 
