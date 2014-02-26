@@ -505,6 +505,7 @@ SciPyはNumPy上に構築された、数値積分、最適化、統計、信号�
 上記の例では物体がつながっている箇所があるのでOpening演算を実施し、分離する
 
 .. code-block:: python
+   :linenos:
 
    #!/usr/bin/env python
    # -*- coding: utf-8 -*-
@@ -558,6 +559,7 @@ Matlabの.matファイルを読み書きできる
 配列を画像として保存できる。miscにはlenaもいる
 
 .. code-block:: python
+   :linenos:
 
    from scipy import misc
    import numpy as np
