@@ -4,6 +4,9 @@ Descriptor
 
 著者:yuhma21
 
+.. contents:: コンピュータビジョンの導入
+   :depth: 2
+
 画像間の対応付けの方法
 
 #. Harrisコーナー検出
@@ -44,10 +47,11 @@ Harris行列の固有値でコーナーを判断する。
    
    \frac{det(\overline{M_I})}{trace(\overline{M_I})}
 
-
 detは行列の判別式、traceは対角成分の和を示す
 
 値が大きい場合はコーナーがあり、中位はエッジで、0に近い箇所は平坦といったところでしょうか。
+
+----
 
 .. function:: gaussian_filter(input, sigma, order=0, output=None, mode='reflect', cval=0.0)
    :module: scipy.ndimage.filters
@@ -72,6 +76,8 @@ detは行列の判別式、traceは対角成分の和を示す
       gaussian_filter : ndarray
 
       インプットと同じ形の配列を返す
+
+----
 
 **ハリスのコーナー検出を行うコード**
 
@@ -173,6 +179,8 @@ x,y方向にそれぞれ微分した様子
 
 .. image:: /cv/descripter/harrisDe.png
 
+----
+
 .. function:: nonzero(a)
    :module: numpy
 
@@ -195,6 +203,8 @@ x,y方向にそれぞれ微分した様子
              [1, 0]])
 
    得られたnonzeroの結果を転置すると行列の組のリストが作れます
+
+----
 
 画像間の対応点を見つける
 ----------------------------------
