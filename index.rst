@@ -15,6 +15,7 @@ Contents:
    Intro
    Descriptor
    About PIL
+   OpenCV
 
 
 Indices and tables
